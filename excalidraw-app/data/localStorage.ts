@@ -53,9 +53,9 @@ export const importFromLocalStorage = () => {
       const parsedElements = JSON.parse(savedElements);
       // Apply data migration for backward compatibility
       elements = clearElementsForLocalStorage(parsedElements);
-      
+
       // Optimize memory usage by removing duplicate elements
-      const uniqueElements = elements.filter((element, index, arr) => 
+      const uniqueElements = elements.filter((element, index, arr) =>
         arr.findIndex(e => e.id === element.id) === index
       );
       elements = uniqueElements;

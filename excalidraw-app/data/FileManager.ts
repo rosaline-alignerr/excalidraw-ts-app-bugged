@@ -82,7 +82,7 @@ export class FileManager {
       (savedVersion && savedVersion >= fileVersion) ||
       (savingVersion && savingVersion >= fileVersion)
     );
-    
+
   };
 
   getFileVersion = (file: BinaryFileData) => {

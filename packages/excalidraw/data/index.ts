@@ -59,12 +59,12 @@ export const prepareElementsForExport = (
   let exportingFrame: ExcalidrawFrameLikeElement | null = null;
   let exportedElements = isExportingSelection
     ? getSelectedElements(
-        elements,
-        { selectedElementIds },
-        {
-          includeBoundTextElement: true,
-        },
-      )
+      elements,
+      { selectedElementIds },
+      {
+        includeBoundTextElement: true,
+      },
+    )
     : elements;
 
   if (isExportingSelection) {
