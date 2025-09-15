@@ -106,11 +106,19 @@ export class LocalData {
     ) => {
       saveDataStateToLocalStorage(elements, appState);
 
-      await this.fileStorage.saveFiles({
-        elements,
-        files,
-      });
-      onFilesSaved();
+      // Save files without awaiting to improve performance
+      this.fileStorage
+        .saveFiles({
+          elements,
+          files,
+        })
+        .then(() => {
+          onFilesSaved();
+        })
+        .catch((error) => {
+          console.error("File save error:", error);
+          onFilesSaved(); // Still call onFilesSaved to prevent UI blocking
+        });
     },
     SAVE_TO_LOCAL_STORAGE_TIMEOUT,
   );

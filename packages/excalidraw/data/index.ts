@@ -152,7 +152,9 @@ export const exportCanvas = async (
     } else if (type === "clipboard-svg") {
       const svg = await svgPromise.then((svg) => svg.outerHTML);
       try {
-        await copyTextToSystemClipboard(svg);
+        // Add metadata for better clipboard compatibility
+        const svgWithMetadata = `<!-- Excalidraw Export -->\n${svg}`;
+        await copyTextToSystemClipboard(svgWithMetadata);
       } catch (e) {
         throw new Error(t("errors.copyToSystemClipboardFailed"));
       }

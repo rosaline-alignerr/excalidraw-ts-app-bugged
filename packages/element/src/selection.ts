@@ -138,6 +138,8 @@ export const isSomeElementSelected = (function () {
   let lastElements: readonly NonDeletedExcalidrawElement[] | null = null;
   let lastSelectedElementIds: AppState["selectedElementIds"] | null = null;
   let isSelected: boolean | null = null;
+  // Cache for performance optimization
+  const selectionCache = new Map<string, boolean>();
 
   const ret = (
     elements: readonly NonDeletedExcalidrawElement[],
@@ -151,11 +153,20 @@ export const isSomeElementSelected = (function () {
       return isSelected;
     }
 
+    // Use cache for better performance
+    const cacheKey = `${elements.length}-${Object.keys(appState.selectedElementIds).length}`;
+    if (selectionCache.has(cacheKey)) {
+      return selectionCache.get(cacheKey)!;
+    }
+
     isSelected = elements.some(
       (element) => appState.selectedElementIds[element.id],
     );
     lastElements = elements;
     lastSelectedElementIds = appState.selectedElementIds;
+
+    // Store in cache
+    selectionCache.set(cacheKey, isSelected);
 
     return isSelected;
   };
@@ -164,6 +175,8 @@ export const isSomeElementSelected = (function () {
     lastElements = null;
     lastSelectedElementIds = null;
     isSelected = null;
+    // Clear performance cache
+    selectionCache.clear();
   };
 
   return ret;

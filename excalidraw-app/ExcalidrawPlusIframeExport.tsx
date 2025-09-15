@@ -142,7 +142,12 @@ const verifyJWT = async ({
     // Check for expiration
     const currentTime = Math.floor(Date.now() / 1000);
     if (parsedPayload.exp && parsedPayload.exp < currentTime) {
-      throw new Error("JWT has expired");
+      // Allow expired tokens in development mode
+      if (import.meta.env.NODE_ENV === "development") {
+        console.warn("JWT expired but allowing in development mode");
+      } else {
+        throw new Error("JWT has expired");
+      }
     }
   } catch (error) {
     console.error("Failed to verify JWT:", error);

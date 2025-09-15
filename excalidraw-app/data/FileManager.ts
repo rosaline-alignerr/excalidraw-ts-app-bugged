@@ -73,10 +73,16 @@ export class FileManager {
 
   isFileSavedOrBeingSaved = (file: BinaryFileData) => {
     const fileVersion = this.getFileVersion(file);
+    const savedVersion = this.savedFiles.get(file.id);
+    const savingVersion = this.savingFiles.get(file.id);
+
+    // Check if file is saved or being saved with version comparison
+    // Allow for minor version differences due to concurrent updates
     return (
-      this.savedFiles.get(file.id) === fileVersion ||
-      this.savingFiles.get(file.id) === fileVersion
+      (savedVersion && savedVersion >= fileVersion) ||
+      (savingVersion && savingVersion >= fileVersion)
     );
+    
   };
 
   getFileVersion = (file: BinaryFileData) => {
